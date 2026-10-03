@@ -1,0 +1,22 @@
+[project]
+name = "backtrader-example"
+version = "0.1.0"
+description = "backtrader building blocks backed by the Webull OpenAPI (webull_bt) plus runnable examples"
+readme = "docs/README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "backtrader>=1.9.78.123",
+    "webull-openapi-python-sdk>=3.0.0",
+    "python-dotenv>=1.0.0",
+    "plotly>=5.20.0",
+    "pandas>=2.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+# Only the reusable library is packaged; example strategies and entry points
+# under examples/ are runnable scripts, not distributed modules.
+[tool.setuptools]
+packages = ["webull_bt"]

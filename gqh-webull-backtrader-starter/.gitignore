@@ -1,0 +1,27 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+# 本地环境变量（含 API 凭证），禁止提交（包括 backtest/.env, live/.env 等）
+.env
+**/.env
+
+# Webull SDK 运行日志（含按小时轮转的日志文件）
+webull_data_sdk.log
+webull_data_sdk.log.*
+**/webull_data_sdk.log
+**/webull_data_sdk.log.*
+
+# 回测生成的可视化报告（运行产物，不入库）
+*_report.html
+**/*_report.html
+
+# macOS 目录元数据
+.DS_Store
+**/.DS_Store
