@@ -3,6 +3,7 @@ Adds SEC acceptance time, reaction day (exchange calendar), ticker fallback, sha
 known before the event, and removes repeat announcements."""
 import json
 import os
+import re
 import time
 from bisect import bisect_left
 from datetime import date, datetime, time as dtime
@@ -89,6 +90,22 @@ def reaction_day(ts, sess):
             return d
     return None
 
+TICKER = re.compile(r"[A-Z]{1,5}([.\-][A-Z]{1,2})?")
+
+
+def pick_ticker(raw, current):
+    """Ticker as printed in the release. If it lists several (joint releases) or isn't a ticker
+    (a company name, drug code, foreign code), use the filing company's SEC ticker."""
+    raw = raw.split(":")[-1].replace("$", "").strip().upper()
+    parts = [p.strip() for p in re.split(r",|/|;|\bAND\b", raw) if p.strip()]
+    for p in parts:
+        if p in current:
+            return p, "release_text"
+    if len(parts) == 1 and TICKER.fullmatch(parts[0]):
+        return parts[0], "release_text"
+    if current:
+        return current[0], "sec_current"
+    return "", "missing"
 
 # ---------- build ----------
 
@@ -124,13 +141,7 @@ if __name__ == "__main__":
         if rday is None or rday > LAST_EVENT_DAY:
             continue
 
-        t = r.ticker.split(":")[-1].replace("$", "").strip().upper()
-        if t:
-            ticker, t_src = t, "release_text"
-        elif current_tickers:
-            ticker, t_src = current_tickers[0], "sec_current"
-        else:
-            ticker, t_src = "", "missing"
+        ticker, t_src = pick_ticker(r.ticker, current_tickers)
 
         known = shares[pd.to_datetime(shares["filed"]) < pd.Timestamp(rday)]   # only numbers filed before the event
         last = known.sort_values(["filed", "end"]).iloc[-1] if len(known) else None

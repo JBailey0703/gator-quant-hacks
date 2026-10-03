@@ -11,5 +11,6 @@ logs/
 webull_data_sdk.log*
 **/webull_data_sdk.log*
 data/prices/
+data/events/*_test.csv
 **/conf/
 WRITEUP_NOTES.md
