@@ -18,7 +18,9 @@ Fails if: high-spin and low-spin releases perform the same, clean results show n
 - Out-of-sample: 2025-01-01 to 2026-10-02 (events through 2026-09-02; run once)
 - Universe: SIC 2834, 2836, 8731; market cap $300M–$10B on event date; 20-day avg dollar volume ≥ $5M
 - Event: press release or 8-K reporting clinical-trial results
-- Entry: close of release day if published before 4:00 PM ET, else next day's close
+- First reaction day: first trading session whose actual close is after the release timestamp; use the exchange calendar, including holidays and early closes.
+- First-day return vs XBI: stock return minus XBI return, both measured from the preceding trading session's close to the first reaction day's close.
+- Entry (both trade types): finalize the signal after the first reaction day's close using information available by that close, then enter at the following trading session's regular-hours open using that opening price, with costs applied.
 - Gemini: gemini-3.1-flash-lite, temperature 0, names/tickers/dates redacted
 - Readout: primary endpoint met (yes/no/unclear); spin score 0–4 = gap between what the release claims and the primary endpoint registered on ClinicalTrials.gov (registry version posted before the release)
 - Validation only (not traded): ClinicalTrials.gov posted results and FDA decisions after the event
