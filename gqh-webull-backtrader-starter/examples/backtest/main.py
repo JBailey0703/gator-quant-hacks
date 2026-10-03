@@ -175,7 +175,7 @@ def build_feed(data_client: DataClient, symbol: str) -> WebullData:
         count=count,
         fromdate=fromdate,
         todate=todate,
-        trading_sessions="PRE,RTH,ATH,OVN",
+        trading_sessions="RTH",
     )
 
 
