@@ -5,6 +5,7 @@
 | 2026-10-03 15:14 | Filter prompt: count only releases whose main purpose is new human trial results; exclude earnings/corporate-update releases. Test sample made random across years | Hand check of 30 answers: most "true" were quarterly earnings releases repeating older trial news | No (filter labels only, no returns) |
 | 2026-10-03 15:39 | Both trade types enter at the next session's open after the first reaction day's close; defined the reaction session and stock-minus-XBI close-to-close return. | First-day return is known only after the close; entry must follow signal availability to avoid same-close lookahead. | No returns evaluated during this change. |
 | 2026-10-03 15:49 | Entry price: next session's close instead of next session's open | Our regular-hours prices are built from hour bars; the 9:00 bar includes pre-market trades, so opens are not reliable. Closes are exact | No returns evaluated |
+| 2026-10-03 16:27 | Horizons: 5 and 20 days replaced by a full curve at 1, 2, 3, 5, 10, 20, 40, 60 trading days; trading horizon chosen by a fixed rule (best 2018–2023 net Sharpe on a plateau), confirmed on 2024, locked before out-of-sample | Shows where the edge lives instead of guessing; the rule removes discretion | No returns evaluated |
 
 
 Recall after broadening: 88% (2,268 of 2,580).

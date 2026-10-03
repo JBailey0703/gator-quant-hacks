@@ -27,7 +27,8 @@ Fails if: high-spin and low-spin releases perform the same, clean results show n
 - Spin groups: top vs bottom third, cut points from in-sample only
 - Spun trade: top-third spin and first-day return vs XBI > 0 → short
 - Clean trade: bottom-third spin → long if primary met, short if missed
-- Horizons: 5 and 20 trading days
+- Horizons: event-study returns reported at 1, 2, 3, 5, 10, 20, 40, 60 trading days for every group, in-sample and out-of-sample
+- Trading horizon selection rule (fixed in advance): the horizon with the highest net-of-cost Sharpe on 2018–2023, among horizons whose two neighbors on the list also have positive net returns (a plateau, not a spike); ties go to the longer horizon (lower turnover). Confirmed on 2024, then locked before the out-of-sample run. All horizons are reported, not only the chosen one.
 - Benchmark: XBI
 - Position size: min(5% of capital, 1% of 20-day dollar volume)
 - Max positions: 20; max gross exposure: 100%
@@ -37,5 +38,5 @@ Fails if: high-spin and low-spin releases perform the same, clean results show n
 
 1. Long-only
 2. Keyword-rule spin score instead of Gemini
-3. 5-day vs 20-day horizon
+3. All horizons (1, 2, 3, 5, 10, 20, 40, 60 trading days) reported; trading horizon chosen by the rule above
 4. Text-only spin score (no ClinicalTrials.gov match), also the fallback for unmatched events
