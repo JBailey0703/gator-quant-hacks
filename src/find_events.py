@@ -14,7 +14,10 @@ load_dotenv(ROOT / ".env")
 
 START, END = "2018-05-01", "2026-09-02"          # same dates as HYPOTHESIS.md
 BIOTECH_SICS = {"2834", "2836", "8731"}
-PHRASES = ['"topline results"', '"top-line results"', '"topline data"', '"top-line data"', '"primary endpoint"']
+PHRASES = ['"topline results"', '"top-line results"', '"topline data"', '"top-line data"',
+           '"primary endpoint"', '"positive data"', '"positive results"', '"interim data"',
+           '"preliminary data"', '"initial data"', '"clinical data"', '"results from the Phase"',
+           '"data from the Phase"', '"statistically significant"', '"efficacy data"']
 
 SEC_URL = "https://efts.sec.gov/LATEST/search-index"
 SEC_HEADERS = {"User-Agent": os.environ["SEC_USER_AGENT"]}
@@ -60,8 +63,9 @@ def find_sec():
                     s = h["_source"]
                     if not BIOTECH_SICS & set(s.get("sics") or []):
                         continue                       # not a biotech/pharma company
-                    if not s.get("file_type", "").startswith("EX-99"):
-                        continue                       # not the press release attachment
+                    ftype = s.get("file_type", "")
+                    if not (ftype.startswith("EX-99") or ftype == "8-K"):
+                        continue                       # keep press releases and the 8-K text itself
                     rows.append({"cik": s["ciks"][0], "adsh": s["adsh"], "file_date": s["file_date"],
                                  "doc_name": h["_id"].split(":", 1)[1],
                                  "company": s["display_names"][0], "sic": ";".join(s["sics"]),
