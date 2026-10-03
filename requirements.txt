@@ -2,3 +2,5 @@
 databento
 pandas
 python-dotenv
+google-genai
+requests
