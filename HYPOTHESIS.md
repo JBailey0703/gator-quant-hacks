@@ -20,7 +20,7 @@ Fails if: high-spin and low-spin releases perform the same, clean results show n
 - Event: press release or 8-K reporting clinical-trial results
 - First reaction day: first trading session whose actual close is after the release timestamp; use the exchange calendar, including holidays and early closes.
 - First-day return vs XBI: stock return minus XBI return, both measured from the preceding trading session's close to the first reaction day's close.
-- Entry (both trade types): finalize the signal after the first reaction day's close using information available by that close, then enter at the following trading session's regular-hours open using that opening price, with costs applied.
+- Entry (both trade types): finalize the signal after the first reaction day's close using information available by that close, then enter at the following trading session's regular-hours close, with costs applied.
 - Gemini: gemini-3.1-flash-lite, temperature 0, names/tickers/dates redacted
 - Readout: primary endpoint met (yes/no/unclear); spin score 0–4 = gap between what the release claims and the primary endpoint registered on ClinicalTrials.gov (registry version posted before the release)
 - Validation only (not traded): ClinicalTrials.gov posted results and FDA decisions after the event
