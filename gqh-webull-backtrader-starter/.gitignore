@@ -17,6 +17,7 @@ webull_data_sdk.log
 webull_data_sdk.log.*
 **/webull_data_sdk.log
 **/webull_data_sdk.log.*
+**/conf/token.txt
 
 # 回测生成的可视化报告（运行产物，不入库）
 *_report.html
