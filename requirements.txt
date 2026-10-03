@@ -1,0 +1,4 @@
+-e ./gqh-webull-backtrader-starter
+databento
+pandas
+python-dotenv

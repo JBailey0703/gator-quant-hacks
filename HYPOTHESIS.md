@@ -13,8 +13,9 @@ Fails if: high-spin and low-spin releases perform the same, clean results show n
 
 ## Settings
 
-- In-sample: 2019-01-01 to 2025-02-28
-- Out-of-sample: 2025-03-01 to 2026-09-30 (run once)
+- Development (in-sample): 2018-05-01 to 2023-12-31
+- Validation (in-sample): 2024-01-01 to 2024-12-31
+- Out-of-sample: 2025-01-01 to 2026-10-02 (events through 2026-09-02; run once)
 - Universe: SIC 2834, 2836, 8731; market cap $300M–$10B on event date; 20-day avg dollar volume ≥ $5M
 - Event: press release or 8-K reporting clinical-trial results
 - Entry: close of release day if published before 4:00 PM ET, else next day's close
