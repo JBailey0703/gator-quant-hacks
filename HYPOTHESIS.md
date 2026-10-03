@@ -40,3 +40,12 @@ Fails if: high-spin and low-spin releases perform the same, clean results show n
 2. Keyword-rule spin score instead of Gemini
 3. All horizons (1, 2, 3, 5, 10, 20, 40, 60 trading days) reported; trading horizon chosen by the rule above
 4. Text-only spin score (no ClinicalTrials.gov match), also the fallback for unmatched events
+
+## Implementation rules (fixed before any returns were computed)
+
+- Spin score used for trading: registry-comparison score when the event is matched to a ClinicalTrials.gov trial; text-only score otherwise
+- Spin groups: clean = score 0-1, spun = score 2-4 (rubric definitions; replaces top/bottom third because scores are whole numbers and thirds create ties)
+- Liquidity: 20-session average dollar volume before the reaction day, divided by 0.24 (measured Nasdaq-feed share of total volume), must be at least $5M
+- Market cap: shares outstanding filed before the event x close of the session before the reaction day, between $300M and $10B
+- One open position per stock; if 20 positions are open, new signals are skipped
+- Robustness: results also reported without the 475 events timed by release date only, for the 168 events with unchanged registry records, and with text-only spin for all events
