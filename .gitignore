@@ -7,11 +7,18 @@ __pycache__/
 
 data/raw/
 data/cache/
-logs/
-webull_data_sdk.log*
-**/webull_data_sdk.log*
 data/prices/
 data/events/*_test.csv
+
+logs/
+
+webull_data_sdk.log*
+**/webull_data_sdk.log*
+
 **/conf/
+
 WRITEUP_NOTES.md
 PROJECT_STATE.md
+
+reproduced/
+*.log

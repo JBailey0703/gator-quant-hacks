@@ -133,21 +133,25 @@ def monthly_returns(series, capital=None):
     return m.pct_change().fillna(m.iloc[0] / first - 1)
 
 
-if __name__ == "__main__":
-    OUT.mkdir(exist_ok=True)
+def main(results=RESULTS, out=OUT):
+    out.mkdir(exist_ok=True)
     xbi = b.load_prices(b.BENCHMARK)["close"]
     spy = spy_closes()
     rows = []
     for p in PERIODS:
-        eq = pd.read_csv(RESULTS / f"equity_{p}.csv", dtype={"date": str}).set_index("date")["equity"]
-        trades = pd.read_csv(RESULTS / f"trades_{p}.csv", dtype={"entry": str, "exit": str})
+        eq = pd.read_csv(results / f"equity_{p}.csv", dtype={"date": str}).set_index("date")["equity"]
+        trades = pd.read_csv(results / f"trades_{p}.csv", dtype={"entry": str, "exit": str})
         rets = {tk: daily_returns(tk, eq.index) for tk in trades["ticker"].unique()}
         monthly = monthly_returns(eq, b.CAPITAL)
         xbi_m = monthly_returns(xbi.reindex(eq.index))
         rows.append({"period": p, **tail(eq, monthly), **exposure(trades, rets, eq), **factors(eq, xbi, spy),
                      **position_correlation(trades, rets), **regime(monthly, xbi_m)})
-    out = pd.DataFrame(rows).set_index("period")
-    out.to_csv(OUT / "risk_diagnostics.csv")
+    table = pd.DataFrame(rows).set_index("period")
+    table.to_csv(out / "risk_diagnostics.csv")
     pd.set_option("display.width", 200)
-    print(out.T.to_string())
-    print(f"\nwrote {OUT / 'risk_diagnostics.csv'}")
+    print(table.T.to_string())
+    print(f"\nwrote {out / 'risk_diagnostics.csv'}")
+
+
+if __name__ == "__main__":
+    main()
