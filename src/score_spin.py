@@ -116,7 +116,7 @@ def release_body(text, n=7000):
 MONTHS = r"(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sept?|Oct|Nov|Dec)\.?"
 DATES = [re.compile(MONTHS + r"\s+\d{1,2}(st|nd|rd|th)?,?\s+\d{4}", re.I),
          re.compile(r"\b\d{1,2}/\d{1,2}/\d{2,4}\b"), re.compile(r"\b(19|20)\d{2}\b")]
-DRUG_CODE = re.compile(r"\b(?!COVID)[A-Z]{1,6}-?\d{2,6}[A-Za-z]?\b")       # VX-814, KT-621, BXCL501, NCT01234567
+DRUG_CODE = re.compile(r"\b(?!COVID)[A-Z]{1,6}-?\d{2,6}[A-Za-z]?\b")       # VX-814, KT-621, BXCL501 (8-digit trial IDs like NCT01234567 are NOT matched)
 PERSON = re.compile(r"\b(Dr|Mr|Ms|Mrs|Prof)\.?\s+[A-Z][a-z]+(\s+[A-Z]\.)?(\s+[A-Z][a-z]+)?")
 SAID = re.compile(r"\b(said|says|commented|stated|added)\s+[A-Z][a-z]+(\s+[A-Z]\.)?\s+[A-Z][a-z]+")
 GENERIC_WORDS = {"applied", "advanced", "global", "american", "international", "united", "first", "general",

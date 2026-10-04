@@ -2,6 +2,8 @@
     python tests/test_backtest.py
 Each line prints PASS or FAIL. Covers the fixes from the mock-judge reviews: lookahead, splits,
 period isolation, stopped trading, tickers, exclusions/repeats, limits, reporting, comparisons, OOS lock."""
+import contextlib
+import io
 import json
 import sys
 import tempfile
@@ -147,16 +149,19 @@ check("9a fingerprint changes when a price file changes", b.frozen_config(5)["in
 (tmp / "horizon_choice.json").write_text(json.dumps({"horizon": 5}))
 b.prepare = lambda with_oos=False: (b.event_table(ev, prices, cal, xbi_r, jumps, with_oos)[0].assign(
     group=lambda d: b.group_label(d), direction=lambda d: b.signals(d, "main")), cal, rets)
-b.out_of_sample()
+def quiet_oos():
+    with contextlib.redirect_stdout(io.StringIO()):          # invented data: don't print its "out-of-sample" metrics
+        b.out_of_sample()
+quiet_oos()
 check("9b lock written before results", (tmp / "OOS_LOCK.json").exists())
 try:
-    b.out_of_sample()
+    quiet_oos()
     check("9c identical rerun allowed", True)
 except SystemExit:
     check("9c identical rerun allowed", False)
 (tmp / "spin_scores.csv").write_text("changed\n")
 try:
-    b.out_of_sample()
+    quiet_oos()
     check("9d changed rerun refused", False)
 except SystemExit:
     check("9d changed rerun refused", True)
