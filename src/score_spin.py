@@ -28,6 +28,7 @@ DOC_DIR = ROOT / "data" / "raw" / "docs"
 HL_DOC_DIR = ROOT / "data" / "raw" / "hand_label_docs"
 EVENTS = ROOT / "data" / "events"
 SCORES = ROOT / "labels" / "spin_scores.json"
+SNAPSHOTS = EVENTS / "registry_snapshots.csv"   # AACT pre-release registry text (aact_extract.py)
 LABELS = ROOT / "labels" / "hand_labels.csv"
 TEST_IDS = ["HL001", "HL003", "HL006", "HL008", "HL010", "HL011", "HL013"]
 ITEM_MARKERS = ["Item 8.01", "Item 7.01", "Item 2.02", "Item 1.01"]
@@ -158,15 +159,30 @@ def registry_text(primaries, secondaries, phase, allocation, masking):
     return "\n".join(lines)
 
 
+def aact_lookup():
+    """{trial ID: AACT snapshot rows, oldest first}, only rows that have a primary endpoint."""
+    snaps = pd.read_csv(SNAPSHOTS, dtype=str).fillna("")
+    snaps = snaps[snaps["primary_outcomes"] != "[]"].sort_values("snapshot")
+    return {nct: list(g.itertuples()) for nct, g in snaps.groupby("nct")}
+
+
+def snapshot_before(ev, lookup):
+    """Latest AACT snapshot dated before the event = the registry text public at the time (or None)."""
+    event_date = ev.accepted[:10] if ev.timing_basis == "acceptance_time" else ev.release_date
+    rows = [s for s in lookup.get(ev.nct, []) if s.snapshot < event_date]
+    return rows[-1] if rows else None
 # ---------- all events ----------
 
-def score_event(ev, mode):
+def score_event(ev, mode, snap=None):
     text = release_body((DOC_DIR / f"{ev.adsh}.txt").read_text(encoding="utf-8", errors="replace"))
     terms = event_terms(ev)
     reg = None
     if mode == "registry":
         reg = registry_text(json.loads(ev.primary_outcomes or "[]"), json.loads(ev.secondary_outcomes or "[]"),
                             ev.registry_phase, ev.allocation, ev.masking)
+    elif mode == "aact":
+        reg = registry_text(json.loads(snap.primary_outcomes), json.loads(snap.secondary_outcomes),
+                            snap.phase, snap.allocation, snap.masking)
     return ask(redact(text, terms), redact(reg, terms))
 
 
@@ -175,13 +191,20 @@ def run_events(limit):
     if limit:
         evs = evs.sample(n=limit, random_state=3)
     scores = json.loads(SCORES.read_text()) if SCORES.exists() else {}
-    tasks = [(ev, "text") for ev in evs.itertuples()] + [(ev, "registry") for ev in evs.itertuples() if ev.nct]
+    lookup = aact_lookup()
+    rejected = set()
+    if (EVENTS / "match_checks.csv").exists():
+        mc = pd.read_csv(EVENTS / "match_checks.csv", dtype=str)
+        rejected = set(mc.loc[mc["same_trial"] == "no", "adsh"])   # wrong trial -> not confident -> text-only
+    snap_of = {ev.adsh: snapshot_before(ev, lookup) for ev in evs.itertuples() if ev.nct}
+    tasks = ([(ev, "text") for ev in evs.itertuples()] + [(ev, "registry") for ev in evs.itertuples() if ev.nct]
+             + [(ev, "aact") for ev in evs.itertuples() if snap_of.get(ev.adsh) is not None])
     tasks = [(ev, m) for ev, m in tasks if f"{ev.adsh}|{m}" not in scores]
     print(f"{len(scores)} already scored, {len(tasks)} to go")
 
     tok_in = tok_out = 0
     with ThreadPoolExecutor(max_workers=4) as pool:
-        futures = {pool.submit(score_event, ev, m): (ev.adsh, m) for ev, m in tasks}
+        futures = {pool.submit(score_event, ev, m, snap_of.get(ev.adsh)): (ev.adsh, m) for ev, m in tasks}
         for i, f in enumerate(as_completed(futures), 1):
             res, t_in, t_out = f.result()
             tok_in, tok_out = tok_in + t_in, tok_out + t_out
@@ -195,10 +218,17 @@ def run_events(limit):
     rows = []
     for ev in evs.itertuples():
         t, r = scores.get(f"{ev.adsh}|text"), scores.get(f"{ev.adsh}|registry")
+        a, s = scores.get(f"{ev.adsh}|aact"), snap_of.get(ev.adsh)
+        used = t if ev.adsh in rejected else (a or t)
         rows.append({"adsh": ev.adsh, "nct": ev.nct, "registry_source": ev.registry_source,
                      "spin_text": t["spin"] if t else "", "met_text": t["met"] if t else "",
                      "spin_registry": r["spin"] if r else "", "met_registry": r["met"] if r else "",
-                     "rationale_registry": r["rationale"] if r else "", "rationale_text": t["rationale"] if t else ""})
+                     "rationale_registry": r["rationale"] if r else "", "rationale_text": t["rationale"] if t else "",
+                     "aact_snapshot": s.snapshot if a and s is not None else "",
+                     "spin_aact": a["spin"] if a else "", "met_aact": a["met"] if a else "",
+                     "rationale_aact": a["rationale"] if a else "",
+                     "spin_used": used["spin"] if used else "", "met_used": used["met"] if used else "",
+                     "spin_source": ("text, match rejected" if ev.adsh in rejected and t else "aact" if a else ("text" if t else ""))})
     out = evs.merge(pd.DataFrame(rows), on=["adsh", "nct", "registry_source"], how="left")
     out.to_csv(EVENTS / ("spin_scores_test.csv" if limit else "spin_scores.csv"), index=False)
 
@@ -210,6 +240,13 @@ def run_events(limit):
     if len(both):
         diff = (both["spin_registry"].astype(int) - both["spin_text"].astype(int)).abs()
         print(f"  registry vs text-only: same score {(diff == 0).mean():.0%}, within 1 point {(diff <= 1).mean():.0%}")
+        print(f"  AACT pre-release spin scores: {out['spin_aact'].astype(str).value_counts().sort_index().to_dict()}")
+        print(f"  endpoint met (AACT): {out['met_aact'].value_counts().to_dict()}")
+        print(f"  spin used for trading comes from: {out['spin_source'].value_counts().to_dict()}")
+        pair = out[(out["spin_aact"] != "") & (out["spin_registry"] != "")]
+        if len(pair):
+            d = (pair["spin_aact"].astype(int) - pair["spin_registry"].astype(int)).abs()
+            print(f"  AACT vs today's record: same score {(d == 0).mean():.0%}, within 1 point {(d <= 1).mean():.0%}")
     if limit:
         print(f"  tokens per call: in {tok_in / max(len(tasks), 1):.0f}, out {tok_out / max(len(tasks), 1):.0f}")
 
