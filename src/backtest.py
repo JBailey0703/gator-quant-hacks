@@ -92,6 +92,7 @@ def daily_returns(px, cal, xbi_r, split_days):
 def event_table(ev, prices, cal, xbi_r, jumps, with_oos=False):
     pos = {d: i for i, d in enumerate(cal)}
     last = len(cal) - 1
+    ends = {name: max(k for k, d in enumerate(cal) if d <= p[1]) for name, p in (("dev", DEV), ("val", VAL), ("oos", OOS))}
     rows, cache = [], {}
     for e in ev.itertuples():
         row = {"adsh": e.adsh, "cik": e.cik, "ticker": e.ticker, "reaction_day": e.reaction_day,
@@ -124,11 +125,11 @@ def event_table(ev, prices, cal, xbi_r, jumps, with_oos=False):
         if close[[prev, rd, entry]].isna().any():
             row["excluded"] = "no trade on previous day, reaction day or entry day"
             continue
-        before = set(cal[max(0, i - 21): i + 2])               # up to and including the entry day only
+        before = set(cal[max(0, i - 21): i + 1])               # up to the reaction day: what we know when deciding
         if ((tj["kind"] == "unverified") & tj["day"].isin(before)).any():
-            row["excluded"] = "unverified price jump before entry"
+            row["excluded"] = "unverified price jump before the signal"
             continue
-        during = set(cal[i + 2: i + 62])                         # the days a 60-session hold covers
+        during = set(cal[i + 1: i + 62])                         # entry day + the days a 60-session hold covers
         row["jump_during_hold"] = bool(((tj["kind"] == "unverified") & tj["day"].isin(during)).any())
         row["split_during_hold"] = bool(((tj["kind"] == "reverse_split") & tj["day"].isin(during)).any())
         splits = tj.loc[tj["kind"] == "reverse_split", "day"]
@@ -148,6 +149,10 @@ def event_table(ev, prices, cal, xbi_r, jumps, with_oos=False):
             continue
         if dv20 < MIN_DV:
             row["excluded"] = "illiquid (Nasdaq 20-day dollar volume < $1.2M)"
+            continue
+        period = "dev" if e.reaction_day <= DEV[1] else "val" if e.reaction_day <= VAL[1] else "oos"
+        if i + 1 + MAX_HOLD > ends[period]:
+            row["excluded"] = "60-day window crosses the period end"   # checked BEFORE any return is computed
             continue
         stop = pos.get(close.last_valid_index(), last)            # the stock's last real trade
         for h in HORIZONS:
@@ -178,13 +183,14 @@ def signals(t, variant):
         return np.where(t["first_day"] > 0, -1, 0)
     spin, met = {"main": ("spin_used", "met_used"), "long_only": ("spin_used", "met_used"),
                  "costs_2x": ("spin_used", "met_used"), "no_date_only": ("spin_used", "met_used"),
-                 "delisted_longs_lose_all": ("spin_used", "met_used"),
+                 "delisted_longs_lose_all": ("spin_used", "met_used"), "delisted_longs_lose_30": ("spin_used", "met_used"),
                  "unchanged_registry": ("spin_used", "met_used"), "no_split_trades": ("spin_used", "met_used"),
                  "text_only": ("spin_text", "met_text"),
-                 "keyword": ("spin_keyword", "met_text"), "registry_today": ("spin_registry", "met_registry")}[variant]
+                 "keyword": ("spin_keyword", "met_used"), "registry_today": ("spin_registry", "met_registry")}[variant]
     s, m = t[spin], t[met]
-    if variant == "registry_today":                     # today's record if matched, else text-only
-        s, m = s.where(s != "", t["spin_text"]), m.where(s != "", t["met_text"])
+    if variant == "registry_today":     # today's record only where the main strategy uses the pre-release record
+        use = t["spin_source"] == "aact"
+        s, m = t["spin_registry"].where(use, t["spin_used"]), t["met_registry"].where(use, t["met_used"])
     d = np.array([direction(a, b, f) for a, b, f in zip(s, m, t["first_day"])])
     if variant == "long_only":
         d = np.where(d > 0, d, 0)
@@ -210,7 +216,7 @@ def usable(t, cal, period):
 
 # ---------- portfolio ----------
 
-def portfolio(t, d, h, cal, rets, period, capital=CAPITAL, cost=COST, borrow=BORROW, impact=False, terminal_loss=False,
+def portfolio(t, d, h, cal, rets, period, capital=CAPITAL, cost=COST, borrow=BORROW, impact=False, terminal_loss=0.0,
               nasdaq_share=NASDAQ_SHARE):
     """Daily simulation. Close of day t: mark to market, exits, then entries (earlier event time first)."""
     pos = {x: i for i, x in enumerate(cal)}
@@ -227,7 +233,7 @@ def portfolio(t, d, h, cal, rets, period, capital=CAPITAL, cost=COST, borrow=BOR
         for p in open_:
             r = rets[p["ticker"]][k]
             r = 0.0 if np.isnan(r) else r
-            fee = p["expo"] * borrow / 252 if p["dir"] < 0 else 0.0
+            fee = p["expo"] * borrow / 252 if p["dir"] < 0 and k <= p["stop_idx"] else 0.0   # no borrow after the last trade
             gain = p["dir"] * p["expo"] * r - fee
             p["expo"] *= 1 + r
             p["pnl"] += gain
@@ -237,8 +243,8 @@ def portfolio(t, d, h, cal, rets, period, capital=CAPITAL, cost=COST, borrow=BOR
             stopped = k >= p["stop_idx"] and p["stop_idx"] < len(cal) - 1     # last real trade was before today
             if p["exit_idx"] == k or stopped:
                 c = p["expo"] * (cost + p["impact"])
-                if stopped and terminal_loss and p["dir"] > 0:
-                    c = p["expo"]                                          # worst case: a long loses everything
+                if stopped and terminal_loss and p["dir"] > 0:              # side results: a long that stops trading loses
+                    c = p["expo"] * terminal_loss + p["expo"] * (1 - terminal_loss) * cost   # 30% or 100%, then the exit fee
                 pnl -= c
                 p["pnl"] -= c
                 traded += p["expo"]
@@ -261,6 +267,8 @@ def portfolio(t, d, h, cal, rets, period, capital=CAPITAL, cost=COST, borrow=BOR
                 skipped["no_room"] += 1
                 continue
             imp = e.sigma20 * np.sqrt(size / (e.dv20 / nasdaq_share)) if impact and e.sigma20 == e.sigma20 else 0.0
+            if imp:
+                size = min(size, room * (1 + cost) / (1 + cost + imp))      # leave room for the impact cost too            
             c = size * (cost + imp)
             equity -= c
             traded += size
@@ -382,7 +390,7 @@ def plot_equity(curves, path, title):
 # ---------- run ----------
 
 VARIANTS = ["main", "long_only", "costs_2x", "endpoint_only", "firstday_only", "text_only",
-            "registry_today", "keyword", "no_date_only", "unchanged_registry", "no_split_trades", "delisted_longs_lose_all"]
+            "registry_today", "keyword", "no_date_only", "unchanged_registry", "no_split_trades", "delisted_longs_lose_30", "delisted_longs_lose_all"]
 
 
 def run_variants(t, h, cal, rets, period):
@@ -390,19 +398,23 @@ def run_variants(t, h, cal, rets, period):
     for v in VARIANTS:
         cost, borrow = (2 * COST, 2 * BORROW) if v == "costs_2x" else (COST, BORROW)
         c, log, traded, skipped = portfolio(t, signals(t, v), h, cal, rets, period, cost=cost, borrow=borrow,
-                                            terminal_loss=(v == "delisted_longs_lose_all"))
+                                            terminal_loss={"delisted_longs_lose_30": 0.30, "delisted_longs_lose_all": 1.0}.get(v, 0.0))
         rows.append({"variant": v, **metrics(c, log, traded, skipped)})
     return pd.DataFrame(rows)
 
 
 def prepare(with_oos=False):
     xbi = load_prices(BENCHMARK)
+    if xbi is None:
+        raise SystemExit(f"no {BENCHMARK} prices in {PRICES}: run src/download_event_prices.py --go first")
     cal = list(xbi.index[(xbi.index >= DEV[0]) & (xbi.index <= OOS[1])])
     xbi_r = xbi["close"].reindex(cal).pct_change()
     ev = load_events()
     jumps = pd.read_csv(EVENTS / "price_jumps.csv", dtype=str)
     prices = {tk: load_prices(tk) for tk in ev["ticker"].unique() if tk}
     t, cache = event_table(ev, prices, cal, xbi_r, jumps, with_oos)
+    if "first_day" not in t.columns:
+        raise SystemExit("no event has usable prices: check data/prices/databento (run src/download_event_prices.py --go)")
     rets = {tk: v[0].values for tk, v in cache.items()}
     t["group"] = group_label(t)
     t["direction"] = signals(t, "main")
@@ -473,10 +485,16 @@ def in_sample():
 
 
 def frozen_config(h):
-    """Horizon + fingerprint of the inputs and this code. Any change gives a different fingerprint."""
+    """Horizon + one fingerprint of the event inputs, every price file and this code, plus package versions.
+    Any change to data, code or software gives a different fingerprint."""
     files = [EVENTS / "spin_scores.csv", EVENTS / "price_jumps.csv", EVENTS / "keyword_spin.csv",
-             EVENTS / "manual_exclusions.csv", Path(__file__)]
-    return {"horizon": h, "inputs_sha256": hashlib.sha256(b"".join(f.read_bytes() for f in files if f.exists())).hexdigest()}
+             EVENTS / "manual_exclusions.csv", Path(__file__)] + sorted(PRICES.rglob("*.csv"))
+    digest = hashlib.sha256()
+    for f in files:
+        if f.exists():
+            digest.update(str(f.relative_to(ROOT) if f.is_relative_to(ROOT) else f.name).encode())
+            digest.update(f.read_bytes())
+    return {"horizon": h, "inputs_sha256": digest.hexdigest(), "pandas": pd.__version__, "numpy": np.__version__}
 
 
 def out_of_sample():
@@ -491,6 +509,8 @@ def out_of_sample():
     else:
         lock.write_text(json.dumps({**config, "started": datetime.now().isoformat(timespec="seconds")}, indent=2))
     t, cal, rets = prepare(with_oos=True)
+    t.loc[t["period"] == "oos"].drop(columns=[c for c in t.columns if c.startswith("ar_")]) \
+        .to_csv(RESULTS / "event_table_oos.csv", index=False)       # split/jump/stop flags for the note
     elig = usable(t[t["excluded"] == ""], cal, (*OOS, "oos"))
     es = event_study(elig, "group", signed=True)
     es.to_csv(RESULTS / "event_study_oos.csv", index=False)

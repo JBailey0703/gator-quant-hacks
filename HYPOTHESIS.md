@@ -1,5 +1,5 @@
 # Hypothesis
-> The **Final rules** section at the bottom is authoritative. Earlier sections are kept unchanged to show what was committed first.
+> The **Final rules** section and its addenda at the bottom are authoritative. Where they differ, the latest addendum wins. Earlier sections are kept unchanged to show what was committed first.
 
 ## Statement
 
@@ -94,7 +94,7 @@ Fails if: high-spin and low-spin releases perform the same, clean results show n
 - Baselines: endpoint-only (long met, short missed, spin ignored); first-day-only (short every first-day rise, spin ignored); keyword spin; text-only spin.
 - Robustness: without date-only events; only events whose current registry record is unchanged since the release; text-only spin for all events; today's registry record; 2x costs; long-only.
 
-## Final rules addendum (2026-10-04, after a second mock-judge review, before any returns were computed)
+## Final rules addendum (2026-10-03 ~23:20 ET, after a second mock-judge review, before any returns were computed)
 
 - Data-quality exclusion: only an unverified price jump from 21 sessions before the reaction day through the entry day excludes an event. Later jumps keep the trade with real prices (flagged).
 - Reverse splits: the split-day return is the day's price ratio divided by the nearest standard split ratio (replaces "equal to XBI's return"). Side result: without trades that have a split during the hold.
@@ -105,3 +105,13 @@ Fails if: high-spin and low-spin releases perform the same, clean results show n
 - Match confidence: a match-check answer of "no" or "unsure", or the matcher's own "not confident" flag, uses the text-only spin score.
 - Limits: 5% per stock and 100% gross apply at entry (100% after the entry fee); no rebalancing.
 - Reporting: event studies are gross (before costs); net evidence is the portfolio. Capacity shown with Nasdaq share of total volume 15%, 24% and 35%.
+
+## Final rules addendum 2 (2026-10-04 ~00:15 ET, after a third mock-judge review, before any returns were computed)
+
+- Data-quality exclusion: the window ends on the reaction day (the entry-day close is unknown when the order is placed); a jump on the entry day is only flagged.
+- The 60-session period-window rule is applied before any return is computed (exclusion reason "60-day window crosses the period end").
+- No short borrow is charged after a stock's last real trade. Added side result: longs in stocks that stop trading lose 30% (alongside the 100% worst case). Main rule unchanged: exit at the last real close (disclosed as optimistic).
+- Comparisons change one thing: the keyword variant uses the main strategy's endpoint labels; the today's-registry variant uses today's record only for events the main strategy scores against the pre-release (AACT) record.
+- The out-of-sample fingerprint covers every price file and the pandas/numpy versions; the out-of-sample run also saves its event table (flags only, no returns).
+- Capacity runs leave room for the price-impact cost when sizing.
+- Known limitations kept and disclosed, with in-sample sizes: inferred split ratios (0 of 457 in-sample trades have a split during the hold); exit at the last real close (5 of 457).
