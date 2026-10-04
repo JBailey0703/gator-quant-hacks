@@ -1,4 +1,5 @@
 # Hypothesis
+> The **Final rules** section at the bottom is authoritative. Earlier sections are kept unchanged to show what was committed first.
 
 ## Statement
 
@@ -49,3 +50,46 @@ Fails if: high-spin and low-spin releases perform the same, clean results show n
 - Market cap: shares outstanding filed before the event x close of the session before the reaction day, between $300M and $10B
 - One open position per stock; if 20 positions are open, new signals are skipped
 - Robustness: results also reported without the 475 events timed by release date only, for the 168 events with unchanged registry records, and with text-only spin for all events
+
+## Final rules (committed 2026-10-03 night, after a mock-judge review, before any returns were computed)
+
+### Events and timing
+- Event time: SEC acceptance time converted to New York time when the 8-K was filed on the release date; otherwise the release date at 11:59 PM (time unknown, assumed after the close).
+- Excluded: release date after the SEC filing; 8-K filed more than 7 days after the release date; dates before 2018-05-01 (`data/events/excluded_events.csv`).
+- First reaction day, first-day return vs XBI and entry (next session's regular-hours close) as in Settings.
+
+### Prices
+- Databento XNAS.ITCH hour bars from 09:00 through the bar ending at the close (4 PM; 1 PM on early-close days); close = last Nasdaq regular-hours trade. Data end: 2026-10-02.
+- Splits (`src/check_splits.py`): one-day rise above 3x = reverse split if jump-day volume < 5x its 10-day average or an 8-K mentions a reverse split (45 days before to 5 days after); split-day stock return set equal to XBI's. Drop below 1/3 with volume < 5x average = unverified → event excluded. Split between the shares-outstanding filing and the reaction day → event excluded.
+- Events without a price on the previous session, reaction day or entry day are excluded. A position in a stock that stops trading is closed at its last available close.
+
+### Signal
+- Registry text: from the latest AACT snapshot dated before the event date that contains the matched trial. Spin used for trading: that registry score; text-only score if the trial is not in an earlier snapshot, the event is unmatched, or the match is marked not confident. Scores against today's registry record are a labeled diagnostic only.
+- Groups: clean = spin 0-1, spun = spin 2-4.
+- Short: spun and first-day return vs XBI > 0. Long: clean and primary endpoint met. Short: clean and primary endpoint missed. No trade otherwise (spun that fell, endpoint unclear). "Endpoint met" comes from the same scoring call as the spin used.
+
+### Universe (on the event, using data before the reaction day)
+- SIC 2834, 2836, 8731.
+- Market cap $300M-$10B = latest shares outstanding filed before the reaction day x close of the session before the reaction day.
+- Liquidity: 20-session average Nasdaq-feed dollar volume before the reaction day >= $1.2M. (Same threshold as "$5M total dollar volume" at the measured 24% Nasdaq share, stated in the units we actually measure.)
+
+### Portfolio
+- Starting capital $1,000,000; stock positions only (no XBI hedge); marked to market at daily closes; idle cash earns 0.
+- Size at entry: min(5% of current equity, 1% of 20-session average Nasdaq-feed dollar volume).
+- Max 20 open positions, gross exposure <= 100%, one position per stock (a new signal for a stock already held is skipped).
+- When more signals arrive on one day than free slots: earlier event time first, then ticker alphabetically.
+- On each close, exits are processed before entries.
+- Exit at the close H sessions after the entry session.
+- Costs: 20 bps of traded value on entry and on exit; short borrow 10%/yr charged per session held (1/252). Stress test: 40 bps and 20%/yr.
+- Sharpe = annualized mean / standard deviation of daily portfolio returns (including idle days), net of all costs.
+
+### Horizon selection
+- H is chosen from 1, 2, 3, 5, 10, 20, 40, 60 sessions using events with reaction days 2018-05-01 to 2023-12-31 (each trade belongs to the period of its reaction day and is held to its full exit).
+- Eligible: H whose neighbor(s) on the list (one neighbor for 1 and 60) have positive net annual return. Choose the eligible H with the highest net Sharpe; Sharpe within 0.05 → the longer H. If none is eligible: H = 20, and the note reports that the plateau condition failed.
+- Confirmed if net Sharpe at H on 2024 is > 0. If not confirmed, the out-of-sample run still uses the same H and the note reports it. No re-selection.
+- Out-of-sample: events with reaction days 2025-01-01 onward whose full H-session hold ends by 2026-10-02; run once.
+
+### Evidence reported (not traded)
+- Event study: return vs XBI from entry to each horizon, by trade group and by spin score 0-4; 95% bootstrap intervals resampling companies (2,000 draws).
+- Baselines: endpoint-only (long met, short missed, spin ignored); first-day-only (short every first-day rise, spin ignored); keyword spin; text-only spin.
+- Robustness: without date-only events; only events whose current registry record is unchanged since the release; text-only spin for all events; today's registry record; 2x costs; long-only.

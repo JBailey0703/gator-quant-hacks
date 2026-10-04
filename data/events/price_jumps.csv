@@ -1,0 +1,228 @@
+ticker,cik,day,ratio,volume_x,kind,evidence
+ACET,0001720580,2025-12-30,16.1323,0.17,reverse_split,low volume
+ACRS,0001557746,2021-01-19,3.1969,271.56,real_move,"high volume, no 8-K"
+ACRS,0001557746,2023-11-13,0.1353,32.19,real_move,high volume
+AGLE,0001636282,2023-06-22,3.632,129.76,reverse_split,8-K mentions reverse split
+AKBA,0001517022,2020-09-03,0.265,22.77,real_move,high volume
+ALLK,0001564824,2021-12-22,0.1013,87.34,real_move,high volume
+ALLK,0001564824,2025-01-27,0.2002,22.84,real_move,high volume
+ALLR,0001860657,2023-03-27,33.7662,0.03,reverse_split,low volume
+ALLR,0001860657,2023-06-29,36.6,0.52,reverse_split,low volume
+ALLR,0001860657,2024-04-09,15.9091,0.79,reverse_split,low volume
+ALLR,0001860657,2024-09-11,34.185,0.22,reverse_split,low volume
+ALT,0001326190,2018-09-14,21.6713,0.72,reverse_split,low volume
+ALT,0001326190,2018-09-19,3.8173,8.13,reverse_split,8-K mentions reverse split
+ALVR,0001754068,2023-12-22,0.3299,17.46,real_move,high volume
+AMLX,0001658551,2024-03-08,0.1769,24.15,real_move,high volume
+AMRN,0000897448,2018-09-24,4.1569,47.85,real_move,"high volume, no 8-K"
+ANAB,0001370053,2019-11-08,0.2816,53.56,real_move,high volume
+ANRO,0001999480,2024-10-23,0.2982,29.18,real_move,high volume
+APRE,0001781983,2020-12-28,0.2199,36.38,real_move,high volume
+APTO,0000882361,2023-06-06,14.8605,0.25,reverse_split,low volume
+APTO,0000882361,2025-02-26,32.6087,0.04,reverse_split,low volume
+APTX,0001674365,2019-01-16,0.3331,34.41,real_move,high volume
+APVO,0001671584,2024-03-06,47.9907,0.17,reverse_split,low volume
+APVO,0001671584,2024-12-04,42.4255,0.08,reverse_split,low volume
+APVO,0001671584,2025-12-30,17.1476,0.11,reverse_split,low volume
+AQXP,0001404644,2018-06-27,0.1519,91.93,real_move,high volume
+ARPO,0001422142,2019-03-18,0.2916,14.73,real_move,high volume
+ASNS,0001501697,2018-06-28,0.2201,35.64,real_move,high volume
+ATHA,0001620463,2024-09-04,0.2174,40.33,real_move,high volume
+ATNF,0001690080,2024-10-16,4.1961,1043.86,reverse_split,8-K mentions reverse split
+ATRA,0001604464,2023-11-09,0.1982,28.06,real_move,high volume
+ATYR,0001339970,2025-09-15,0.1686,11.66,real_move,high volume
+AVTE,0001798749,2024-06-17,0.0674,39.38,real_move,high volume
+AVTX,0001534120,2023-06-26,0.1151,142.14,real_move,high volume
+AZRX,0001604191,2021-09-13,7.5138,0.55,reverse_split,low volume
+AZTR,0001701478,2025-08-21,7.0359,0.8,reverse_split,low volume
+BBIO,0001743881,2021-12-27,0.2802,18.99,real_move,high volume
+BCDA,0000925741,2024-05-30,15.0,0.18,reverse_split,low volume
+BDTX,0001701541,2023-06-27,3.3587,1047.31,real_move,"high volume, no 8-K"
+BLPH,0001600132,2018-08-07,0.3084,58.88,real_move,high volume
+BLPH,0001600132,2020-02-10,13.6364,0.21,reverse_split,low volume
+BLPH,0001600132,2020-03-20,5.4749,208.65,reverse_split,8-K mentions reverse split
+BLPH,0001600132,2023-06-05,0.1321,66.18,real_move,high volume
+CALC,0001534133,2026-01-28,0.2441,344.33,real_move,high volume
+CAPR,0001133869,2020-04-29,3.4647,179.62,real_move,"high volume, no 8-K"
+CAPR,0001133869,2025-12-03,4.7114,23.7,real_move,"high volume, no 8-K"
+CATB,0001454789,2020-10-27,0.2892,42.67,real_move,high volume
+CCXI,0001340652,2019-11-26,3.8114,48.95,real_move,"high volume, no 8-K"
+CING,0001862150,2023-11-30,19.3559,1.31,reverse_split,low volume
+CLNN,0001822791,2024-07-11,17.8596,0.49,reverse_split,low volume
+CLRB,0001279704,2018-07-17,9.6395,6.63,reverse_split,8-K mentions reverse split
+CLRB,0001279704,2022-07-22,8.4426,1.35,reverse_split,low volume
+CRBP,0001595097,2020-09-08,0.2433,10.71,real_move,high volume
+CRVO,0001053691,2024-12-10,0.2109,16.59,real_move,high volume
+CTMX,0001501989,2024-05-01,3.1341,280.08,real_move,"high volume, no 8-K"
+CTXR,0001851484,2024-11-26,31.3901,0.32,reverse_split,low volume
+CYCN,0001755237,2019-10-30,0.2051,66.71,real_move,high volume
+DCPH,0001654151,2021-11-05,0.2453,25.04,real_move,high volume
+DRRX,0001082038,2023-11-08,0.2066,23.81,real_move,high volume
+EFTR,0001828522,2024-01-12,27.865,0.06,reverse_split,low volume
+EFTR,0001828522,2024-04-04,0.1817,26.62,real_move,high volume
+EFTR,0001828522,2024-06-24,0.2419,37.56,real_move,high volume
+EIGR,0001305253,2022-12-08,0.3047,35.75,real_move,high volume
+ELOX,0001035354,2022-12-02,42.999,0.37,reverse_split,low volume
+ELTX,0001601485,2026-06-15,0.2746,20.9,real_move,high volume
+ENGN,0001980845,2026-05-07,0.1941,32.99,real_move,high volume
+EPIX,0001633932,2024-11-01,0.2796,832.32,real_move,high volume
+EQ,0001746466,2020-07-13,8.4531,1521.0,reverse_split,8-K mentions reverse split
+EYEN,0001682639,2024-11-15,0.2993,50.26,real_move,high volume
+EYEN,0001682639,2025-02-03,77.6812,0.06,reverse_split,low volume
+FBRX,0001419041,2021-09-03,0.1779,55.16,real_move,high volume
+FCSC,0000357097,2018-05-25,4.5182,3.55,reverse_split,low volume
+FGEN,0000921299,2023-06-26,0.1688,11.93,real_move,high volume
+FGEN,0000921299,2025-06-17,21.8216,0.17,reverse_split,low volume
+FPRX,0001175505,2020-11-11,3.3645,193.57,real_move,"high volume, no 8-K"
+FREQ,0001703647,2021-03-23,0.2202,22.25,real_move,high volume
+GLTO,0001800315,2023-08-15,0.2889,30.34,real_move,high volume
+GLYC,0001253689,2019-08-05,0.3078,13.8,real_move,high volume
+GLYC,0001253689,2024-05-06,0.1725,16.93,real_move,high volume
+GNMX,0001138776,2019-01-03,0.2436,70.92,real_move,high volume
+GOSS,0001728117,2022-12-06,0.2523,14.65,real_move,high volume
+GOSS,0001728117,2026-02-23,0.1961,22.75,real_move,high volume
+GRI,0001824293,2026-01-26,26.5686,0.27,reverse_split,low volume
+GRTS,0001656634,2024-10-10,0.3177,15.34,real_move,high volume
+GRTX,0001563577,2021-10-19,0.3061,279.02,real_move,high volume
+GTXI,0001260990,2018-09-21,0.0754,60.66,real_move,high volume
+HCWB,0001828673,2026-06-30,5.8694,0.1,reverse_split,low volume
+HGEN,0001293310,2022-07-13,0.2043,25.04,real_move,high volume
+HLVX,0001888012,2024-07-08,0.1158,70.51,real_move,high volume
+HOOK,0001760542,2024-07-10,10.9237,0.31,reverse_split,low volume
+IMUX,0001280776,2022-10-21,0.2271,1.82,unverified,low volume on a crash
+IOBT,0001865494,2025-09-29,0.2332,6.84,real_move,high volume
+JANX,0001817713,2024-02-27,3.2967,35.59,real_move,"high volume, no 8-K"
+JSPR,0001788028,2023-01-03,5.8514,291.37,real_move,"high volume, no 8-K"
+KALA,0001479419,2025-09-29,0.1071,69.53,real_move,high volume
+KAPA,0001962011,2026-09-01,6.6667,0.13,reverse_split,low volume
+KOD,0001468748,2022-02-23,0.196,26.53,real_move,high volume
+KPTI,0001503802,2026-07-31,0.274,11.11,real_move,high volume
+KROS,0001664710,2024-12-12,0.2674,22.14,real_move,high volume
+KRTX,0001771917,2019-11-18,5.4403,179.22,real_move,"high volume, no 8-K"
+KTRA,0001498382,2023-10-31,0.1969,51.61,real_move,high volume
+LBPH,0001832168,2024-01-02,4.1841,209.86,real_move,"high volume, no 8-K"
+LPCN,0001535955,2023-05-12,15.1175,0.19,reverse_split,low volume
+LPCN,0001535955,2026-04-02,0.2196,28.46,real_move,high volume
+LPTX,0001509745,2025-01-28,0.2844,5.7,real_move,high volume
+LPTX,0001509745,2025-11-12,4.7022,543.86,reverse_split,8-K mentions reverse split
+LXRX,0001062822,2019-07-29,0.297,21.73,real_move,high volume
+LYEL,0001806952,2025-06-02,18.9579,0.79,reverse_split,low volume
+MACK,0001274792,2022-11-09,3.1385,855.45,real_move,"high volume, no 8-K"
+MBRX,0001659617,2025-02-13,3.0476,249.34,reverse_split,8-K mentions reverse split
+MBRX,0001659617,2025-12-01,24.9258,0.28,reverse_split,low volume
+MCRB,0001609809,2020-08-10,4.8712,122.31,real_move,"high volume, no 8-K"
+MDGL,0001157601,2022-12-19,3.6944,10.5,real_move,"high volume, no 8-K"
+MIST,0001408443,2020-03-24,0.1243,47.82,real_move,high volume
+MLND,0001544227,2020-04-06,0.2961,28.32,real_move,high volume
+MLTX,0001821586,2025-09-29,0.1009,47.06,real_move,high volume
+MNPR,0001645469,2024-08-13,5.0625,0.36,reverse_split,low volume
+MNPR,0001645469,2024-10-24,7.131,647.72,real_move,"high volume, no 8-K"
+MPLT,0001770069,2026-07-27,0.2709,9.74,real_move,high volume
+MREO,0001719714,2025-12-29,0.1238,38.69,real_move,high volume
+MRNS,0001267813,2020-09-23,3.828,0.1,reverse_split,low volume
+MRNS,0001267813,2024-10-24,0.1748,45.4,real_move,high volume
+MRSN,0001442836,2023-07-27,0.273,45.92,real_move,high volume
+MTVA,0001638287,2025-12-05,12.432,0.52,reverse_split,low volume
+NERV,0001598646,2020-05-29,0.2752,73.61,real_move,high volume
+NEUP,0001191070,2025-10-21,0.3163,21.18,real_move,high volume
+NGM,0001426332,2022-10-17,0.2955,9.45,real_move,high volume
+NKTR,0000906709,2025-06-09,13.1634,0.76,reverse_split,low volume
+NMRA,0001885522,2025-01-02,0.185,33.45,real_move,high volume
+NMTR,0001551986,2022-10-18,16.0494,0.3,reverse_split,low volume
+NOVN,0001467154,2020-01-03,0.2719,23.95,real_move,high volume
+NOVN,0001467154,2021-05-26,11.0446,0.54,reverse_split,low volume
+NTRP,0001513856,2019-09-09,0.2273,19.95,real_move,high volume
+NVAX,0001000694,2019-02-28,0.331,8.61,real_move,high volume
+NVAX,0001000694,2019-05-10,18.2248,0.25,reverse_split,low volume
+NXTC,0001661059,2019-11-05,3.4892,92.8,real_move,"high volume, no 8-K"
+OCGN,0001372299,2021-02-08,3.0307,13.76,reverse_split,8-K mentions reverse split
+ONCO,0001782107,2025-06-13,63.9785,0.12,reverse_split,low volume
+ONCS,0001444307,2022-11-09,17.7753,0.17,reverse_split,low volume
+ORMP,0001176309,2023-01-12,0.2354,21.66,real_move,high volume
+ORTX,0001748907,2023-03-10,9.1724,0.21,reverse_split,low volume
+OTIC,0001493566,2022-08-01,0.2049,78.88,real_move,high volume
+OVID,0001636651,2024-06-17,0.2417,127.52,real_move,high volume
+PASG,0001787297,2025-07-14,16.9618,0.4,reverse_split,low volume
+PCSA,0001533743,2024-01-22,11.2208,0.3,reverse_split,low volume
+PHIO,0001533040,2024-07-05,9.0128,0.75,reverse_split,low volume
+PHIO,0001533040,2025-01-13,3.8462,812.42,reverse_split,8-K mentions reverse split
+PRAX,0001689548,2022-06-06,0.2194,51.13,real_move,high volume
+PROK,0001850270,2025-07-08,5.9903,247.57,real_move,"high volume, no 8-K"
+PRTO,0001359931,2019-03-28,0.147,36.79,real_move,high volume
+PRVB,0001695357,2019-06-10,3.1701,107.14,real_move,"high volume, no 8-K"
+PSTX,0001661460,2024-11-26,3.2797,22.63,reverse_split,8-K mentions reverse split
+PTE,0001076682,2022-05-17,17.2919,0.09,reverse_split,low volume
+PTI,0001445283,2018-10-18,5.4316,694.07,real_move,"high volume, no 8-K"
+PTI,0001445283,2019-03-25,0.3243,22.18,real_move,high volume
+PTN,0000911216,2025-11-12,111.3497,0.06,reverse_split,low volume
+PULM,0001574235,2022-03-01,18.8979,0.17,reverse_split,low volume
+QNCX,0001662774,2026-01-29,0.0853,14.21,real_move,high volume
+QNCX,0001662774,2026-02-10,4.0615,44.68,real_move,"high volume, no 8-K"
+QNCX,0001662774,2026-04-13,10.341,0.06,reverse_split,low volume
+QNCX,0001662774,2026-06-30,19.4481,0.37,reverse_split,low volume
+QNRX,0001671502,2025-04-09,34.35,0.02,reverse_split,low volume
+QTTB,0001661998,2024-12-11,0.2442,17.22,real_move,high volume
+QURE,0001590560,2025-09-24,3.4824,31.88,real_move,"high volume, no 8-K"
+RAIN,0001724979,2023-05-22,0.1221,94.99,real_move,high volume
+RLMD,0001553643,2022-10-13,0.2043,20.74,real_move,high volume
+RLMD,0001553643,2024-12-04,0.2306,31.71,real_move,high volume
+RNAZ,0001829635,2023-09-26,0.2659,1.01,unverified,low volume on a crash
+RNAZ,0001829635,2024-01-16,30.32,0.15,reverse_split,low volume
+RNAZ,0001829635,2024-12-04,35.6229,0.27,reverse_split,low volume
+RNN,0001228627,2019-04-12,12.1548,0.48,reverse_split,low volume
+RTTR,0001460702,2019-09-13,0.2917,48.03,real_move,high volume
+SAVA,0001069530,2020-05-15,0.2614,26.17,real_move,high volume
+SAVA,0001069530,2024-11-25,0.162,24.85,real_move,high volume
+SCYX,0001178253,2020-07-17,10.4381,0.34,reverse_split,low volume
+SEEL,0001017491,2023-09-20,0.305,64.33,real_move,high volume
+SEEL,0001017491,2023-11-28,22.7751,0.28,reverse_split,low volume
+SEEL,0001017491,2024-05-16,8.11,0.23,reverse_split,low volume
+SGYP,0001347613,2018-10-26,0.3094,22.11,real_move,high volume
+SION,0002036042,2026-08-10,0.0882,30.8,real_move,high volume
+SLRX,0001615219,2024-06-17,8.2564,2.53,reverse_split,low volume
+SMMT,0001599298,2024-05-30,3.7172,8.54,reverse_split,8-K mentions reverse split
+SNGX,0000812796,2026-04-28,0.2964,28.98,real_move,high volume
+SNPX,0001571934,2022-12-16,0.2505,42.68,real_move,high volume
+SNTI,0001854270,2024-12-02,4.6574,7884.08,reverse_split,8-K mentions reverse split
+SPRO,0001701108,2025-05-28,3.4407,811.24,real_move,"high volume, no 8-K"
+SRRK,0001727196,2024-10-07,4.6083,28.72,real_move,"high volume, no 8-K"
+STSA,0001692830,2020-09-10,0.2404,1051.65,real_move,high volume
+STSA,0001692830,2022-11-14,0.1667,137.77,real_move,high volume
+SVRA,0001160308,2019-06-13,0.2457,21.24,real_move,high volume
+SYN,0000894158,2022-07-25,9.8324,0.05,reverse_split,low volume
+SYRS,0001556263,2024-11-13,0.1317,29.37,real_move,high volume
+TCDA,0001595585,2022-10-24,0.0552,29.38,real_move,high volume
+TENX,0000034956,2023-01-05,21.5122,0.31,reverse_split,low volume
+TENX,0000034956,2026-08-10,0.1019,16.28,real_move,high volume
+THAR,0001861657,2023-11-21,20.3399,0.02,reverse_split,low volume
+THAR,0001861657,2023-11-28,0.2783,3.94,unverified,low volume on a crash
+THRX,0001745020,2023-07-14,0.2797,82.3,real_move,high volume
+TNXP,0001430306,2022-05-17,25.0283,0.17,reverse_split,low volume
+TNXP,0001430306,2023-05-10,5.4556,0.65,reverse_split,low volume
+TNXP,0001430306,2024-06-10,21.2296,0.19,reverse_split,low volume
+TNXP,0001430306,2025-02-05,97.6898,0.02,reverse_split,low volume
+TORC,0001720580,2019-11-15,0.1389,60.67,real_move,high volume
+TROV,0001213037,2018-06-04,11.3182,0.31,reverse_split,low volume
+TROV,0001213037,2019-02-20,5.9955,0.32,reverse_split,low volume
+TRVN,0001429560,2022-11-10,20.8197,0.22,reverse_split,low volume
+TRVN,0001429560,2023-05-08,4.6508,725.49,reverse_split,8-K mentions reverse split
+TSHA,0001806310,2023-08-14,3.0513,321.38,reverse_split,8-K mentions reverse split
+TVRD,0001346830,2025-10-13,0.1577,75.04,real_move,high volume
+UBX,0001463361,2020-08-17,0.3331,11.03,real_move,high volume
+UBX,0001463361,2022-10-20,9.1336,0.3,reverse_split,low volume
+VBIV,0000764195,2023-04-12,20.5144,0.06,reverse_split,low volume
+VBIV,0000764195,2024-07-30,0.2291,35.53,real_move,high volume
+VIRI,0001818844,2022-09-19,0.2276,97.87,real_move,high volume
+VIRI,0001818844,2022-09-20,0.246,58.31,real_move,high volume
+VLON,0001824293,2022-03-21,0.3108,25.0,real_move,high volume
+VTGN,0001411685,2019-11-14,0.2765,32.87,real_move,high volume
+VTGN,0001411685,2022-07-22,0.142,66.32,real_move,high volume
+VTGN,0001411685,2023-06-07,27.3367,0.21,reverse_split,low volume
+VTGN,0001411685,2023-08-07,7.5565,515.39,reverse_split,8-K mentions reverse split
+VTGN,0001411685,2025-12-17,0.1961,33.44,real_move,high volume
+VTGN,0001411685,2026-06-30,0.296,23.5,real_move,high volume
+VTL,0001280776,2018-09-12,0.0714,50.37,real_move,high volume
+VTYX,0001851194,2023-11-07,0.1928,28.55,real_move,high volume
+VVUS,0000881524,2018-09-11,10.8045,0.95,reverse_split,low volume
+VYNE,0001566044,2025-07-30,0.2776,25.97,real_move,high volume
+WINT,0000946486,2025-08-20,0.2082,56.73,real_move,high volume

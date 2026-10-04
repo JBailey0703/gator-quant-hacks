@@ -8,6 +8,7 @@
 | 2026-10-03 16:27 | Horizons: 5 and 20 days replaced by a full curve at 1, 2, 3, 5, 10, 20, 40, 60 trading days; trading horizon chosen by a fixed rule (best 2018–2023 net Sharpe on a plateau), confirmed on 2024, locked before out-of-sample | Shows where the edge lives instead of guessing; the rule removes discretion | No returns evaluated |
 | 2026-10-03 19:11 | Spin groups by rubric (clean 0-1, spun 2-4) instead of top/bottom thirds; implementation rules written down (liquidity adjustment, market cap timing, overlap rule) | Whole-number scores make thirds ambiguous; rules fixed before any backtest | No returns evaluated |
 | 2026-10-03 20:24 | Event timing: SEC acceptance times converted from UTC to New York time (were read as NY, 4–5 h late); events excluded if release date is after the filing (7) or the 8-K came >7 days after the release (30) or dated before 2018-05-01; date-only events assumed after the close (11:59 PM) | Mock-judge review found wrong reaction days (verified Ionis, Cabaletta against SEC pages) | No |
+| 2026-10-03 21:13 | Final rules consolidated in HYPOTHESIS.md: AACT pre-release registry snapshots replace current records for the main signal; half-day bars fixed; split rule; liquidity stated as Nasdaq dollar volume ≥ $1.2M (same threshold); portfolio, horizon-boundary and confirmation rules specified; endpoint-only and first-day-only baselines added | Mock-judge review: lookahead risk from current registry records, open decisions | No |
 
 
 Recall after broadening: 88% (2,268 of 2,580).

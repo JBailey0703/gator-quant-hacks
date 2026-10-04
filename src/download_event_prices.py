@@ -1,8 +1,7 @@
-"""Download regular-hours daily prices for every event stock: one Databento request per year
-per 500 stocks. Run without --go first to see the cost."""
+"""Download regular-hours daily prices for every event stock (and XBI): one Databento request per
+year per 500 stocks. Run without --go first to see the cost."""
 import argparse
 import os
-from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -14,15 +13,23 @@ ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(ROOT / ".env")
 DATASET = "XNAS.ITCH"
 OUT = ROOT / "data" / "prices" / "databento"
+MISSING = ROOT / "data" / "prices" / "missing_symbols.csv"
 EVENTS = ROOT / "data" / "events"
 NY = ZoneInfo("America/New_York")
 CHUNK = 500
+START = "2018-05-01"                  # Databento XNAS.ITCH starts here
+END = "2026-10-03"                    # fixed data end (exclusive): last session 2026-10-02
+BENCHMARK = "XBI"
 
 
 def year_range(year):
-    start = max(f"{year}-01-01", "2018-05-01")                           # Databento starts 2018-05-01
-    end = min(f"{year + 1}-01-01", datetime.now().strftime("%Y-%m-%d"))  # no future dates
-    return start, end
+    return max(f"{year}-01-01", START), min(f"{year + 1}-01-01", END)
+
+
+def early_close(d):
+    """1 PM close: July 3, Christmas Eve, day after Thanksgiving (holidays have no bars anyway)."""
+    return ((d.month == 7 and d.day == 3) or (d.month == 12 and d.day == 24)
+            or (d.month == 11 and d.weekday() == 4 and 23 <= d.day <= 29))
 
 
 def symbols_by_year(events):
@@ -38,21 +45,24 @@ def symbols_by_year(events):
         if d.month >= 9:
             needed.add(d.year + 1)   # up to 60 trading days after entry
         for y in needed:
-            if 2018 <= y <= datetime.now().year:
-                years.setdefault(y, set()).add(r.ticker)
+            if 2018 <= y <= int(END[:4]):
+                years.setdefault(y, {BENCHMARK}).add(r.ticker)
     return years
 
 
 def fetch(dbn, symbols, year):
-    """Hour bars for many stocks -> regular-hours daily bars, one table per stock."""
+    """Hour bars -> regular-hours daily bars, one table per stock.
+    Bars are labeled by their start time; keep 09:00 through the bar that ends at the close
+    (15:00 bar on normal days, 12:00 bar on 1 PM early-close days)."""
     start, end = year_range(year)
     df = dbn.timeseries.get_range(dataset=DATASET, schema="ohlcv-1h", stype_in="raw_symbol",
                                   symbols=symbols, start=start, end=end).to_df()
     if df.empty:
         return {}
     df.index = df.index.tz_convert(NY)
-    df = df.between_time("09:00", "15:00")          # the 15:00 bar ends at 4 PM
     df["date"] = df.index.date
+    last_bar = df["date"].map(lambda d: 12 if early_close(d) else 15)
+    df = df[(df.index.hour >= 9) & (df.index.hour <= last_bar)]
     daily = df.groupby(["symbol", "date"]).agg(
         open=("open", "first"), high=("high", "max"), low=("low", "min"),
         close=("close", "last"), volume=("volume", "sum")).reset_index()
@@ -66,33 +76,42 @@ if __name__ == "__main__":
 
     events = pd.read_csv(EVENTS / "event_records.csv", dtype=str).fillna("")
     dbn = db.Historical(os.environ["DATABENTO_API_KEY"])
-    this_year = datetime.now().year
+    known_missing = set()
+    if MISSING.exists():
+        known_missing = {(int(y), s) for y, s in pd.read_csv(MISSING, dtype=str).itertuples(index=False)}
 
     plan = []
     for year, syms in sorted(symbols_by_year(events).items()):
-        todo = sorted(s for s in syms if year == this_year or not (OUT / s / f"{year}.csv").exists())
+        todo = sorted(s for s in syms
+                      if not (OUT / s / f"{year}.csv").exists() and (year, s) not in known_missing)
         plan += [(year, todo[i:i + CHUNK]) for i in range(0, len(todo), CHUNK)]
 
     total = 0.0
     for year, chunk in plan:
         start, end = year_range(year)
-        cost = dbn.metadata.get_cost(dataset=DATASET, symbols=chunk, schema="ohlcv-1h",
-                                     stype_in="raw_symbol", start=start, end=end)
+        try:
+            cost = dbn.metadata.get_cost(dataset=DATASET, symbols=chunk, schema="ohlcv-1h",
+                                         stype_in="raw_symbol", start=start, end=end)
+        except db.BentoClientError:
+            cost = 0.0                                   # none of these symbols trade on Nasdaq that year
         total += cost
         print(f"{year}: {len(chunk)} stocks  ${cost:.2f}")
     print(f"total estimated cost: ${total:.2f}")
     if not args.go:
         raise SystemExit("dry run only. Add --go to download.")
 
-    missing = []
+    missing = set(known_missing)
     for year, chunk in plan:
-        got = fetch(dbn, chunk, year)
+        try:
+            got = fetch(dbn, chunk, year)
+        except db.BentoClientError:
+            got = {}
         for sym, df in got.items():
             (OUT / sym).mkdir(parents=True, exist_ok=True)
             df.to_csv(OUT / sym / f"{year}.csv", index=False)
-        missing += [(year, s) for s in chunk if s not in got]
+        missing |= {(year, s) for s in chunk if s not in got}
         print(f"{year}: saved {len(got)} of {len(chunk)} stocks")
-    pd.DataFrame(missing, columns=["year", "symbol"]).to_csv(ROOT / "data" / "prices" / "missing_symbols.csv", index=False)
+    pd.DataFrame(sorted(missing), columns=["year", "symbol"]).to_csv(MISSING, index=False)
 
     dates = {}
     have = 0
