@@ -78,7 +78,9 @@ def daily_returns(px, cal, xbi_r, split_days):
     nearest standard split ratio."""
     close = px["close"].reindex(cal)
     r = close.ffill().pct_change()
-    r[r.index > close.last_valid_index()] = np.nan              # stopped trading: no more returns
+    last_trade = close.last_valid_index()
+    if last_trade is not None:
+        r[r.index > last_trade] = np.nan                         # stopped trading: no more returns
     for d in split_days:
         if d in r.index and r[d] == r[d]:                       # r[d] == r[d] is False for a missing value
             ratio = 1 + r[d]
@@ -147,10 +149,11 @@ def event_table(ev, prices, cal, xbi_r, jumps, with_oos=False):
         if dv20 < MIN_DV:
             row["excluded"] = "illiquid (Nasdaq 20-day dollar volume < $1.2M)"
             continue
+        stop = pos.get(close.last_valid_index(), last)            # the stock's last real trade
         for h in HORIZONS:
             j = i + 1 + h
             if j <= last and (with_oos or e.reaction_day < OOS[0]):   # out-of-sample returns only with --oos
-                seg = slice(i + 2, j + 1)
+                seg = slice(i + 2, min(j, stop) + 1)                  # after the last trade: no stock or XBI return
                 row[f"ar_{h}"] = float((1 + r.iloc[seg]).prod() - (1 + xbi_r.iloc[seg]).prod())
     t = pd.DataFrame(rows)
     t["period"] = np.select([t["reaction_day"] <= DEV[1], t["reaction_day"] <= VAL[1]], ["dev", "val"], "oos")
@@ -411,6 +414,9 @@ def in_sample():
     t, cal, rets = prepare()
     t.drop(columns=[c for c in t.columns if c.startswith("ar_")]).to_csv(RESULTS / "event_table.csv", index=False)
     t.groupby(["period", "excluded"]).size().rename("events").to_csv(RESULTS / "exclusions.csv")
+    t.assign(year=t["reaction_day"].str[:4],
+             outcome=np.where(t["excluded"] == "", t["group"], "excluded: " + t["excluded"])) \
+        .groupby(["year", "outcome"]).size().unstack(fill_value=0).to_csv(RESULTS / "attrition_by_year.csv")
     elig = t[t["excluded"] == ""]
     print("eligible events by period and group:\n", elig.groupby(["period", "group"]).size().unstack(fill_value=0))
 
