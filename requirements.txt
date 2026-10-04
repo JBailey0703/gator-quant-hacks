@@ -1,8 +1,12 @@
+# Research environment (tested with Python 3.11.17). Install: pip install -r requirements.txt
+# Full snapshot of every package: requirements-lock.txt
 -e ./gqh-webull-backtrader-starter
-databento
-pandas
-python-dotenv
-google-genai
-requests
-beautifulsoup4
-matplotlib
+databento==0.87.0
+pandas==3.0.6
+numpy==2.4.6
+python-dotenv==1.2.4
+google-genai==2.28.0
+pydantic==2.13.5
+requests==2.34.2
+beautifulsoup4==4.15.0
+matplotlib==3.11.2
