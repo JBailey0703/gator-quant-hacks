@@ -93,3 +93,15 @@ Fails if: high-spin and low-spin releases perform the same, clean results show n
 - Event study: return vs XBI from entry to each horizon, by trade group and by spin score 0-4; 95% bootstrap intervals resampling companies (2,000 draws).
 - Baselines: endpoint-only (long met, short missed, spin ignored); first-day-only (short every first-day rise, spin ignored); keyword spin; text-only spin.
 - Robustness: without date-only events; only events whose current registry record is unchanged since the release; text-only spin for all events; today's registry record; 2x costs; long-only.
+
+## Final rules addendum (2026-10-04, after a second mock-judge review, before any returns were computed)
+
+- Data-quality exclusion: only an unverified price jump from 21 sessions before the reaction day through the entry day excludes an event. Later jumps keep the trade with real prices (flagged).
+- Reverse splits: the split-day return is the day's price ratio divided by the nearest standard split ratio (replaces "equal to XBI's return"). Side result: without trades that have a split during the hold.
+- Periods: an event belongs to a period only if its entry plus 60 sessions ends inside that period (all horizons, event studies and portfolios); equity curves end at the period end. Out-of-sample: events whose 60-session window ends by 2026-10-02. Out-of-sample returns are computed only by `--oos`; its lock (horizon + SHA-256 fingerprint of inputs and code) is written at the start; identical reruns are allowed, changed reruns refused.
+- Stocks that stop trading: exit at the last real close, no borrow afterwards. Side result: longs in such stocks lose 100%.
+- Tickers: only tickers printed in the release are used.
+- Hand exclusions: only those listed with a reason in `data/events/manual_exclusions.csv`. Repeats: also same company + same accepted trial within 30 days.
+- Match confidence: a match-check answer of "no" or "unsure", or the matcher's own "not confident" flag, uses the text-only spin score.
+- Limits: 5% per stock and 100% gross apply at entry (100% after the entry fee); no rebalancing.
+- Reporting: event studies are gross (before costs); net evidence is the portfolio. Capacity shown with Nasdaq share of total volume 15%, 24% and 35%.

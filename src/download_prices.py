@@ -1,4 +1,4 @@
-"""Download daily prices from Webull, one file per symbol per year, and report missing dates."""
+"""Cross-check only (Databento vs Webull for VRTX and IONS). Writes to data/prices/checks/, never to the backtest's price folder."""
 import os
 import time
 from datetime import datetime
@@ -16,7 +16,7 @@ import logging
 logging.getLogger("webull").setLevel(logging.CRITICAL)
 
 ROOT = Path(__file__).resolve().parent.parent
-PRICE_DIR = ROOT / "data" / "prices"
+PRICE_DIR = ROOT / "data" / "prices" / "checks"   # kept apart from data/prices/databento (backtest prices)
 NY = ZoneInfo("America/New_York")
 DATASET = "XNAS.ITCH"
 

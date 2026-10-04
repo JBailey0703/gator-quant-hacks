@@ -195,7 +195,8 @@ def run_events(limit):
     rejected = set()
     if (EVENTS / "match_checks.csv").exists():
         mc = pd.read_csv(EVENTS / "match_checks.csv", dtype=str)
-        rejected = set(mc.loc[mc["same_trial"] == "no", "adsh"])   # wrong trial -> not confident -> text-only
+        rejected = set(mc.loc[mc["same_trial"].isin(["no", "unsure"]), "adsh"])   # wrong or uncertain trial -> text-only
+    rejected |= set(evs.loc[evs["confident"].str.lower() == "false", "adsh"])     # matcher's own "not confident" flag
     snap_of = {ev.adsh: snapshot_before(ev, lookup) for ev in evs.itertuples() if ev.nct}
     tasks = ([(ev, "text") for ev in evs.itertuples()] + [(ev, "registry") for ev in evs.itertuples() if ev.nct]
              + [(ev, "aact") for ev in evs.itertuples() if snap_of.get(ev.adsh) is not None])

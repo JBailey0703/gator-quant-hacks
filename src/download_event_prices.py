@@ -1,5 +1,6 @@
-"""Download regular-hours daily prices for every event stock (and XBI): one Databento request per
-year per 500 stocks. Run without --go first to see the cost."""
+"""Download daily prices for every event stock (and XBI) from Databento hour bars 09:00-16:00 ET
+(the 9:00 bar includes 9:00-9:30 pre-market trades: closes are exact, volume slightly includes
+pre-market). One request per year per 500 stocks. Run without --go first to see the cost."""
 import argparse
 import os
 from pathlib import Path
@@ -92,7 +93,9 @@ if __name__ == "__main__":
         try:
             cost = dbn.metadata.get_cost(dataset=DATASET, symbols=chunk, schema="ohlcv-1h",
                                          stype_in="raw_symbol", start=start, end=end)
-        except db.BentoClientError:
+        except db.BentoClientError as err:
+            if "symbology" not in str(err):
+                raise                                    # key, access or rate-limit problem: stop and show it
             cost = 0.0                                   # none of these symbols trade on Nasdaq that year
         total += cost
         print(f"{year}: {len(chunk)} stocks  ${cost:.2f}")
@@ -104,7 +107,9 @@ if __name__ == "__main__":
     for year, chunk in plan:
         try:
             got = fetch(dbn, chunk, year)
-        except db.BentoClientError:
+        except db.BentoClientError as err:
+            if "symbology" not in str(err):
+                raise                                    # key, access or rate-limit problem: stop and show it
             got = {}
         for sym, df in got.items():
             (OUT / sym).mkdir(parents=True, exist_ok=True)
