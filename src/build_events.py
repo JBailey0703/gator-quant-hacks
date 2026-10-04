@@ -20,7 +20,7 @@ CACHE = ROOT / "data" / "cache"
 EVENTS = ROOT / "data" / "events"
 LAST_EVENT_DAY = date(2026, 9, 2)     # from HYPOTHESIS.md: events through 2026-09-02
 REPEAT_WINDOW_DAYS = 30               # same company + same drug within 30 days = one readout
-
+MAX_FILING_LAG_DAYS = 7               # 8-K is due within 4 business days; longer gaps = date can't be trusted
 
 # ---------- SEC lookups (cached, so reruns are free) ----------
 
@@ -124,19 +124,35 @@ if __name__ == "__main__":
         if i % 100 == 0:
             print(f"   {i}/{len(ciks)}")
 
-    rows = []
+    rows, excluded = [], []
+    start = sess[0]                                              # first day we have prices
     for r in ev.itertuples():
         times, current_tickers, shares = info[r.cik]
         accepted = times.get(r.adsh, "")
-        acc_dt = datetime.fromisoformat(accepted[:19]) if accepted else None   # EDGAR time, read as New York time
+        acc_dt = (pd.Timestamp(accepted).tz_convert("America/New_York").tz_localize(None).to_pydatetime()
+                  if accepted else None)                         # SEC gives UTC ("Z"); convert to New York time
         rel = pd.to_datetime(r.release_date, errors="coerce")
+        rel_d = None if pd.isna(rel) else rel.date()
+        acc_d = acc_dt.date() if acc_dt else None
 
-        if acc_dt and (pd.isna(rel) or rel.date() >= acc_dt.date()):
-            ts, basis = acc_dt, "acceptance_time"                      # filed the same day as the release
-        elif not pd.isna(rel):
-            ts, basis = datetime.combine(rel.date(), dtime(0, 0)), "release_date_only"   # 8-K filed later
-        else:
+        reason = ""
+        if acc_d is None and rel_d is None:
+            reason = "no date"
+        elif acc_d and rel_d and rel_d > acc_d:
+            reason = "release date after SEC filing (contradiction)"
+        elif acc_d and rel_d and (acc_d - rel_d).days > MAX_FILING_LAG_DAYS:
+            reason = f"8-K filed more than {MAX_FILING_LAG_DAYS} days after release (date unverified)"
+        elif min(d for d in (acc_d, rel_d) if d) < start:
+            reason = "before price data starts"
+        if reason:
+            excluded.append({"adsh": r.adsh, "company": r.company, "release_date": r.release_date,
+                             "accepted": acc_dt.isoformat() if acc_dt else "", "reason": reason})
             continue
+
+        if acc_d and (rel_d is None or rel_d == acc_d):
+            ts, basis = acc_dt, "acceptance_time"                # filed the same day as the release
+        else:
+            ts, basis = datetime.combine(rel_d, dtime(23, 59)), "release_date_only"   # time unknown: assume after the close
         rday = reaction_day(ts, sess)
         if rday is None or rday > LAST_EVENT_DAY:
             continue
@@ -148,7 +164,7 @@ if __name__ == "__main__":
 
         rows.append({
             "adsh": r.adsh, "cik": r.cik, "company": r.company, "ticker": ticker, "ticker_source": t_src,
-            "release_date": r.release_date, "accepted": accepted[:19], "timing_basis": basis,
+            "release_date": r.release_date, "accepted": acc_dt.isoformat() if acc_dt else "", "timing_basis": basis,
             "reaction_day": rday, "drug": r.drug, "phase": r.phase, "condition": r.condition,
             "trial_name": r.trial_name, "nct_ids": r.nct_ids,
             "shares_outstanding": last["val"] if last is not None else "",
@@ -168,10 +184,12 @@ if __name__ == "__main__":
         keep.append(r.Index)
     final = df.loc[keep].drop(columns="drug_key")
     final.to_csv(EVENTS / "event_records.csv", index=False)
+    pd.DataFrame(excluded).to_csv(EVENTS / "excluded_events.csv", index=False)
 
     print(f"\nevents in:                          {n_all}")
     print(f"  dropped, flagged as repeats:      {n_flagged}")
-    print(f"  dropped, no usable date or after {LAST_EVENT_DAY}: {len(ev) - len(df)}")
+    print(f"  dropped, bad or unverifiable date: {len(excluded)}  -> data/events/excluded_events.csv")
+    print(f"  dropped, after {LAST_EVENT_DAY}:     {len(ev) - len(df) - len(excluded)}")
     print(f"  dropped, same drug within {REPEAT_WINDOW_DAYS} days: {len(df) - len(final)}")
     print(f"event records:                      {len(final)}  -> data/events/event_records.csv")
     print(f"  timing from acceptance time:      {(final['timing_basis'] == 'acceptance_time').sum()}")

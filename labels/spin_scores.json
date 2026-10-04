@@ -24538,5 +24538,135 @@
 "met": "no",
 "spin": 3,
 "rationale": "The release acknowledges the failure of the primary and secondary endpoints in the overall population but immediately pivots to a strong efficacy narrative based on a prespecified subgroup analysis. By framing the subgroup results as 'robust' and 'compelling' to justify moving to Phase 3, the release gives alternative analyses more weight than the failed primary result supports."
+},
+"0001493152-20-018097|text": {
+"met": "unclear",
+"spin": 3,
+"rationale": "The release presents post-hoc biomarker data from a small subset of cancer patients to suggest efficacy against COVID-19, creating a speculative narrative that lacks clinical trial evidence for the primary indication being promoted."
+},
+"0001104659-20-116255|text": {
+"met": "unclear",
+"spin": 4,
+"rationale": "The provided text is a legal disclaimer and does not contain any clinical trial results, efficacy data, or a statement regarding the primary endpoint, making it impossible to assess the trial outcome or the company's claims."
+},
+"0001485003-18-000075|text": {
+"met": "unclear",
+"spin": 1,
+"rationale": "The release reports a 42% complete response rate for the primary endpoint cohort but does not explicitly state whether this met a pre-defined statistical success threshold, which is common in single-arm trials. The presentation is promotional but provides clear data on the primary endpoint and safety profile without burying the results."
+},
+"0001651308-19-000063|text": {
+"met": "unclear",
+"spin": 1,
+"rationale": "The release reports preliminary data from a non-randomized exploratory cohort of a Phase 3 trial, which is not the primary endpoint of the overall randomized study. The language is promotional but clearly identifies the data as exploratory and from a specific subgroup, rather than claiming the primary trial success."
+},
+"0001214659-21-004353|text": {
+"met": "yes",
+"spin": 2,
+"rationale": "The release reports positive results from a very small Phase 1b study (n=6) and uses these findings to justify a larger registrational trial. While the results are presented as positive, the small sample size and the nature of the study design (3+3 dose escalation) are clearly disclosed, which mitigates the spin."
+},
+"0001171843-22-001397|text": {
+"met": "yes",
+"spin": 1,
+"rationale": "The release accurately reports pharmacokinetic data consistent with the study's goal of comparing the oral film to injectable epinephrine. While the tone is promotional, the primary results are presented clearly without misrepresenting the findings."
+},
+"0001171843-22-004103|text": {
+"met": "unclear",
+"spin": 2,
+"rationale": "The release reports anecdotal clinical responses (CRs) from an ongoing Phase 1/2 dose-escalation study without defining or reporting on a primary endpoint. By highlighting selected patient successes and moving to expansion trials, the company reframes early-stage safety and pharmacokinetic data as evidence of clinical efficacy."
+},
+"0000950170-22-025995|text": {
+"met": "unclear",
+"spin": 0,
+"rationale": "The press release is a neutral announcement of an upcoming conference call to discuss clinical data and does not make any efficacy claims or attempt to interpret results, thus containing no spin."
+},
+"0001564590-21-013009|text": {
+"met": "unclear",
+"spin": 2,
+"rationale": "The release presents interim Phase 1b dose-escalation data as 'positive' and emphasizes efficacy outcomes like complete response rates and steroid reduction, which are appropriate for early-stage trials but framed with promotional language. Because the trial is an open-label, dose-escalation study designed to inform future dosing rather than confirm efficacy, the lack of a clear primary endpoint definition makes the 'positive' framing a meaningful positive reframing of exploratory data."
+},
+"0000950170-23-000928|text": {
+"met": "unclear",
+"spin": 2,
+"rationale": "The release describes early-stage Phase 1 dose-escalation data rather than a completed trial with a defined primary endpoint. While it appropriately frames the results as 'encouraging preliminary clinical activity' in a small sample size, it uses these early signals to justify a major strategic pivot and workforce reduction, which constitutes meaningful positive reframing."
+},
+"0001104659-23-114274|text": {
+"met": "no",
+"spin": 4,
+"rationale": "The company terminated a randomized, controlled non-inferiority trial early and replaced the registered primary analysis with a pooled, non-comparative observational analysis of 26 patients. By claiming the trial 'met its primary objective' despite abandoning the study design and failing to perform the required non-inferiority assessment, the release misrepresents the primary result as a success."
+},
+"0001104659-24-065073|text": {
+"met": "yes",
+"spin": 2,
+"rationale": "While the release accurately reports meeting the primary endpoint of CST reduction, it engages in meaningful positive reframing by emphasizing exploratory sub-analyses and predicting future visual improvements despite the failure to show significant improvement in the key clinical endpoint of BCVA."
+},
+"0001104659-23-067854|text": {
+"met": "no",
+"spin": 0,
+"rationale": "The press release clearly and transparently states that the primary endpoint was not met, provides the specific p-values and numerical results for both primary and secondary endpoints, and acknowledges that there is no path forward for the trial."
+},
+"0001599298-24-000096|text": {
+"met": "yes",
+"spin": 1,
+"rationale": "The release clearly states the primary endpoint of progression-free survival was met and provides context for the head-to-head comparison. While the language is promotional (e.g., 'unprecedented', 'decisively beats'), it accurately represents the primary outcome without concealing failure or relying on secondary endpoints to manufacture success."
+},
+"0001193125-25-256682|text": {
+"met": "unclear",
+"spin": 2,
+"rationale": "The release focuses on biomarker target engagement (Activin E reduction) rather than clinical efficacy (weight loss), which is the ultimate goal for an obesity drug. While it accurately reports the biomarker data, it frames these surrogate results as a success narrative for the drug's potential, while clinical weight loss data remains pending."
+},
+"0001651308-19-000063|registry": {
+"met": "unclear",
+"spin": 2,
+"rationale": "The press release focuses on an exploratory, non-randomized cohort of a Phase 3 trial rather than the primary randomized comparison, which is not yet reported. While the release clearly labels these as exploratory results, it emphasizes positive response rates to build an efficacy narrative before the primary trial results are available."
+},
+"0001104659-20-116255|registry": {
+"met": "unclear",
+"spin": 4,
+"rationale": "The provided press release text is entirely composed of legal disclaimers and contains no clinical trial results, effectively concealing the primary endpoint outcome."
+},
+"0001485003-18-000075|registry": {
+"met": "unclear",
+"spin": 1,
+"rationale": "The press release reports a 42% complete response rate for the primary endpoint cohort but does not explicitly state whether this result met the pre-specified statistical success criteria for the trial. The presentation is promotional in tone, emphasizing the potential of the drug, but it provides the primary endpoint data clearly without burying the results or misrepresenting the study design."
+},
+"0000950170-22-025995|registry": {
+"met": "unclear",
+"spin": 0,
+"rationale": "The press release is a neutral announcement of an upcoming conference call to discuss clinical data and does not make any efficacy claims or interpret results, thus containing no spin."
+},
+"0001214659-21-004353|registry": {
+"met": "yes",
+"spin": 2,
+"rationale": "The release highlights secondary efficacy outcomes (ORR) and biomarker reductions to frame the study as a success, while the primary endpoints were safety-focused (DLTs and neurologic events). While the safety results were positive, the heavy emphasis on 100% ORR in a tiny subgroup (n=3) constitutes meaningful positive reframing."
+},
+"0000950170-23-000928|registry": {
+"met": "unclear",
+"spin": 2,
+"rationale": "The trial is an early-phase dose-escalation study where primary endpoints are safety-focused (dose-limiting toxicity); the release reframes these preliminary safety and exploratory efficacy signals in a very small patient subset as a basis for strategic prioritization and future registrational intent. While the company acknowledges the early nature of the data, the emphasis on 'encouraging' activity in a tiny subgroup (five ovarian cancer patients) to justify a major corporate pivot constitutes meaningful positive reframing."
+},
+"0001171843-22-004103|registry": {
+"met": "yes",
+"spin": 1,
+"rationale": "The trial is a Phase 1/2 dose-escalation study where the primary endpoints are safety, MTD, and PK, which the release addresses by reporting dose levels, safety, and PK findings. The emphasis on clinical responses (CR/CRi) is promotional but appropriate for a Phase 1/2 update, as these are secondary efficacy endpoints rather than a misrepresentation of the primary safety/tolerability goals."
+},
+"0001104659-23-067854|registry": {
+"met": "no",
+"spin": 0,
+"rationale": "The press release clearly states that the primary endpoint was not met and provides the specific p-value and numerical difference. It also transparently reports that secondary endpoints showed no significant benefit, avoiding any attempt to reframe the negative results."
+},
+"0001104659-23-114274|registry": {
+"met": "no",
+"spin": 4,
+"rationale": "The company terminated the trial early, abandoning the registered non-inferiority design and statistical analysis plan, yet claims to have met the primary endpoint based on a small, pooled, non-randomized observation. By relabeling an incomplete, aborted study as a success and ignoring the lack of a formal statistical comparison to the control arm, the release effectively misrepresents the trial results."
+},
+"0001104659-24-065073|registry": {
+"met": "yes",
+"spin": 1,
+"rationale": "The release accurately reports that the primary endpoint of CST reduction was met, while transparently disclosing the failure of the secondary visual acuity endpoint. The inclusion of subgroup analyses and the framing of the results as 'monumental' constitute mild promotional emphasis."
+},
+"0001193125-25-256682|registry": {
+"met": "yes",
+"spin": 1,
+"rationale": "The trial's primary endpoint was safety and tolerability, which the release reports as met (safe and well-tolerated). The focus on secondary target engagement (Activin E reduction) is promotional but accurately framed as secondary data, and the release clearly distinguishes these results from future efficacy readouts."
 }
 }

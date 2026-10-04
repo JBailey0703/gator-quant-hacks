@@ -14,3 +14,4 @@ data/prices/
 data/events/*_test.csv
 **/conf/
 WRITEUP_NOTES.md
+PROJECT_STATE.md
