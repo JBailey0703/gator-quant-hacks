@@ -60,13 +60,17 @@ def run(t, cal, rets, periods):
     return pd.DataFrame(rows)
 
 
-if __name__ == "__main__":
+def main(out=OUT):
     t, cal, rets = b.prepare()                                 # no out-of-sample forward returns are computed
     elig = t[t["excluded"] == ""]
     periods = [("dev", (*b.DEV, "dev")), ("val", (*b.VAL, "val")), ("oos", (*b.OOS, "oos"))]
-    out = run(elig, cal, rets, periods)
-    OUT.mkdir(exist_ok=True)
-    out.to_csv(OUT / "sensitivity.csv", index=False)
-    wide = out.pivot(index="setting", columns="period", values="sharpe")[["dev", "val", "oos"]]
+    table = run(elig, cal, rets, periods)
+    out.mkdir(exist_ok=True)
+    table.to_csv(out / "sensitivity.csv", index=False)
+    wide = table.pivot(index="setting", columns="period", values="sharpe")[["dev", "val", "oos"]]
     print("Sharpe ratio (net) by setting:\n", wide.reindex([n for n, _ in GRID]).round(2).to_string())
-    print(f"\nwrote {OUT / 'sensitivity.csv'}")
+    print(f"\nwrote {out / 'sensitivity.csv'}")
+
+
+if __name__ == "__main__":
+    main()
