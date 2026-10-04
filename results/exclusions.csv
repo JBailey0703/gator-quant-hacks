@@ -1,0 +1,33 @@
+period,excluded,events
+dev,,542
+dev,60-day window crosses the period end,30
+dev,illiquid (Nasdaq 20-day dollar volume < $1.2M),222
+dev,"journal publication of results announced earlier (blind audit AU28, Heron EPOCH 2)",1
+dev,market cap outside $300M-$10B,843
+dev,no prices for the release's ticker,28
+dev,no shares outstanding,37
+dev,"no ticker printed in the release (missing, or today's SEC ticker)",144
+dev,"no trade on previous day, reaction day or entry day",11
+dev,reaction day outside price calendar,13
+dev,repeat: same company and same trial within 30 days,2
+dev,reverse split between shares filing and event,17
+dev,unverified price jump before the signal,3
+oos,,185
+oos,60-day window crosses the period end,9
+oos,illiquid (Nasdaq 20-day dollar volume < $1.2M),43
+oos,market cap outside $300M-$10B,263
+oos,no prices for the release's ticker,6
+oos,no shares outstanding,9
+oos,"no ticker printed in the release (missing, or today's SEC ticker)",32
+oos,"no trade on previous day, reaction day or entry day",4
+oos,reverse split between shares filing and event,10
+val,,73
+val,60-day window crosses the period end,39
+val,illiquid (Nasdaq 20-day dollar volume < $1.2M),50
+val,market cap outside $300M-$10B,174
+val,no prices for the release's ticker,1
+val,no shares outstanding,8
+val,"no ticker printed in the release (missing, or today's SEC ticker)",17
+val,"no trade on previous day, reaction day or entry day",4
+val,repeat: same company and same trial within 30 days,2
+val,reverse split between shares filing and event,11

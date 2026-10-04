@@ -1,0 +1,10 @@
+year,clean_long,clean_short,excluded: 60-day window crosses the period end,excluded: illiquid (Nasdaq 20-day dollar volume < $1.2M),"excluded: journal publication of results announced earlier (blind audit AU28, Heron EPOCH 2)",excluded: market cap outside $300M-$10B,excluded: no prices for the release's ticker,excluded: no shares outstanding,"excluded: no ticker printed in the release (missing, or today's SEC ticker)","excluded: no trade on previous day, reaction day or entry day",excluded: reaction day outside price calendar,excluded: repeat: same company and same trial within 30 days,excluded: reverse split between shares filing and event,excluded: unverified price jump before the signal,no_trade,spun_short
+2018,34,6,0,21,0,74,3,6,25,2,13,0,2,0,9,2
+2019,50,7,0,37,1,127,5,5,32,1,0,1,1,0,23,10
+2020,66,9,0,42,0,115,3,6,17,2,0,0,2,0,25,9
+2021,58,10,0,55,0,132,10,5,22,2,0,1,2,0,44,19
+2022,45,6,0,35,0,198,4,4,27,2,0,0,3,1,31,6
+2023,39,6,30,32,0,197,3,11,21,2,0,0,7,2,14,14
+2024,42,8,39,50,0,174,1,8,17,4,0,2,11,0,12,11
+2025,65,11,0,28,0,172,3,4,23,2,0,0,6,0,23,12
+2026,44,4,9,15,0,91,3,5,9,2,0,0,4,0,20,6
