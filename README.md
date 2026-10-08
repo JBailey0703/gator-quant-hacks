@@ -112,8 +112,8 @@ Checks: Gemini's endpoint call agreed with 6 of 6 held-out hand labels; on a 30-
 **Quick check, no API keys (a few seconds):** runs the 35 regression tests and recomputes every headline number in the note from the committed results.
 
 ```bash
-git clone https://github.com/JBailey0703/gator-quant-hacks.git
-cd gator-quant-hacks
+git clone https://github.com/JBailey0703/spin-vs-substance.git
+cd spin-vs-substance
 python -m venv .venv
 .venv\Scripts\activate            # macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt   # exact environment: requirements-lock.txt (Python 3.11)
